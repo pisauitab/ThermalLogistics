@@ -1,11 +1,11 @@
 buildscript {
-		repositories {
-				jcenter()
-				maven { url = "http://files.minecraftforge.net/maven" }
-		}
-		dependencies {
-				classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
-		}
+	repositories {
+		jcenter()
+		maven { url = "https://files.minecraftforge.net/maven" }
+	}
+	dependencies {
+		classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
+	}
 }
 
 apply plugin: 'net.minecraftforge.gradle.forge'
@@ -33,9 +33,9 @@ minecraft {
 }
 
 repositories {
-	maven { url "http://maven.covers1624.net/" }
-	maven { url "http://dvs1.progwml6.com/files/maven/" }
-	maven { url "http://maven.k-4u.nl" }
+	maven { url "https://maven.covers1624.net/" }
+	maven { url "https://dvs1.progwml6.com/files/maven/" }
+	maven { url "https://maven.k-4u.nl" }
 }
 
 dependencies {
@@ -68,10 +68,10 @@ processResources {
 		include '**/*.properties'
 
 		expand ([
-			'version': project.version,
-			'mcversion': mc_version,
-        	'modid': mod_id,
-        	'name': mod_name
+				'version': project.version,
+				'mcversion': mc_version,
+				'modid': mod_id,
+				'name': mod_name
 		])
 	}
 
@@ -82,50 +82,50 @@ processResources {
 }
 
 jar {
-    manifest {
-        attributes 'FMLAT': "logistics_at.cfg"
-    }
-    finalizedBy reobfJar
+	manifest {
+		attributes 'FMLAT': "logistics_at.cfg"
+	}
+	finalizedBy reobfJar
 }
 
 task deobfJar(type: Jar) {
-    from sourceSets.main.output
-    classifier = 'deobf'
-    manifest {
-        attributes 'FMLAT': "logistics_at.cfg"
-    }
+	from sourceSets.main.output
+	classifier = 'deobf'
+	manifest {
+		attributes 'FMLAT': "logistics_at.cfg"
+	}
 }
 
 task sourcesJar(type: Jar) {
-    from sourceSets.main.allJava
-    classifier = 'sources'
+	from sourceSets.main.allJava
+	classifier = 'sources'
 }
 
 publishing {
-    publications {
-        maven(MavenPublication) {
-            groupId "astavie"
-            artifactId mod_id
-            version project.version
+	publications {
+		maven(MavenPublication) {
+			groupId "astavie"
+			artifactId mod_id
+			version project.version
 
-            artifact jar
-            artifact deobfJar
-            artifact sourcesJar
-        }
-    }
+			artifact jar
+			artifact deobfJar
+			artifact sourcesJar
+		}
+	}
 }
 
 publishing {
-    repositories {
-        maven {
-            url "/media/astavie/External SSD/Code/Github Pages/Maven"
-        }
-    }
+	repositories {
+		maven {
+			url "${project.rootDir}/maven"
+		}
+	}
 }
 
 task pushMaven(type: Exec) {
-    workingDir '/media/astavie/External SSD/Code/Github Pages/Maven'
-    commandLine 'bash', 'push.sh', "astavie/${mod_id}", "Maven, ${mod_name}, ${project.version}"
+	workingDir "${project.rootDir}/maven"
+	commandLine 'bash', 'push.sh', "astavie/${mod_id}", "Maven, ${mod_name}, ${project.version}"
 }
 
 task incrementBuild {
